@@ -17,9 +17,9 @@ namespace Lab1_DRI
 
             // Run
             Operation.GetSum("1", "2", "3");
-            Operation.GetSum("1", "2,0", "3");
-            Operation.GetSum("1", "2.0", "3");
-            Operation.GetSum("-1", "2", "3");
+            Operation.GetSum("4", "4", "7");
+            Operation.GetSum("15", "15", "15");
+            Operation.GetSum("3", "4", "5");
             Operation.GetSum("1", "-2", "3");
             Operation.GetSum("1s", "2d", "3");
 
