@@ -16,7 +16,12 @@ namespace Lab1_DRI
             Log.Debug("Application start");
 
             // Run
-
+            Operation.GetSum("1", "2");
+            Operation.GetSum("1", "2,0");
+            Operation.GetSum("1", "2.0");
+            Operation.GetSum("-1", "2");
+            Operation.GetSum("1", "-2");
+            Operation.GetSum("1s", "2d");
 
             Log.Debug("Application stop");
             Log.CloseAndFlush();
