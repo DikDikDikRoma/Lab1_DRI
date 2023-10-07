@@ -1,22 +1,21 @@
 ﻿using Serilog;
+using System;
 
 namespace Lab1_DRI
 {
-    internal class Operation
+    public class Operation
     {
         public static (string, List<(int, int)>) GetTypeAndCoord(string a , string b, string c) 
         {
             Log.Information($"Запрос проверки на треугольник: a={a}, b={b}, c={c}");
 
-            string textResultPoz = "OK";
-            string textResultNeg = "NOK";
-            string textResultErr = "ERROR";
+            string textResultPoz = "";
 
             try
             {
-                int x = Convert.ToInt32(a);
-                int y = Convert.ToInt32(b);
-                int z = Convert.ToInt32(c);
+                float x = Convert.ToSingle(a);
+                float y = Convert.ToSingle(b);
+                float z = Convert.ToSingle(c);
 
 
 
@@ -25,20 +24,25 @@ namespace Lab1_DRI
                     
                     Log.Information($"{a},{b} и {c} - это числа, они положительys и это {textResultPoz}");
 
-                    int provXnY = x + y;
-                    int provYnZ = y + z;
-                    int provZnX = z + x;
+                    float provXnY = x + y;
+                    float provYnZ = y + z;
+                    float provZnX = z + x;
 
                     if (provXnY > z && provYnZ > x && provZnX > y)
                     {
                         Log.Information($"{a},{b} и {c} - составляют треугольник и это {textResultPoz}");
 
-                        int Ax = 0;
-                        int Ay = 0;
-                        int Bx = Ax + x;
-                        int By = 0;
-                        int Cx = Math.Abs(Bx - Ax - y);
-                        int Cy = Math.Abs(By - Ay - z);
+                        var Ax = 0;
+                        var Ay = 0;
+
+                        // B (угол между a и c)
+                        var Bx = (int)x;
+                        var By = 0;
+
+                        // C (угол между a и b)
+                        var cosA = (y * y + z * z - x * x) / (2 * y * z);
+                        var Cx = (int)(y * cosA);
+                        var Cy = (int)(y * Math.Sqrt(1 - cosA * cosA));
 
 
                         if (x==y && y==z)
@@ -62,26 +66,26 @@ namespace Lab1_DRI
                     }
                     else
                     {
-                        Log.Information($"{a},{b} и {c} - это не треугольник и это {textResultErr} /n Координата A= (-1, -1), B= (-1, -1), C= (-1, -1)");
-                        return (textResultErr, new List<(int, int)> { (-1, -1), (-1, -1), (-1, -1) });
+                        Log.Information($"{a},{b} и {c} - это не треугольник и это  /n Координата A= (-1, -1), B= (-1, -1), C= (-1, -1)");
+                        return ("", new List<(int, int)> { (-1, -1), (-1, -1), (-1, -1) });
                     }
                 }
                 else
                 {
-                    Log.Warning($"Одно/все отрицательны: {x},{y} и/или {z}. Это {textResultNeg} /n Координата A= (-1, -1), B= (-1, -1), C= (-1, -1)");
-                    return (textResultNeg, new List<(int, int)> { (-1, -1), (-1, -1), (-1, -1) });
+                    Log.Warning($"Одно/все отрицательны: {x},{y} и/или {z}. Это  /n Координата A= (-1, -1), B= (-1, -1), C= (-1, -1)");
+                    return ("", new List<(int, int)> { (-1, -1), (-1, -1), (-1, -1) });
                 }
 
             }
             catch (Exception exp)
             {
-                Log.Fatal($"В качестве параметров переданы не числа: '{a}','{b}' и '{c}'. Это {textResultErr} /n Координата A= (-2, -2), B= (-2, -2), C= (-2, -2)"); 
+                Log.Fatal($"В качестве параметров переданы не числа: '{a}','{b}' и '{c}'. Это  /n Координата A= (-2, -2), B= (-2, -2), C= (-2, -2)"); 
                 Log.Fatal($"{exp.Message}/n{exp.StackTrace}");
-                return (textResultErr, new List<(int, int)> { (-2, -2), (-2, -2), (-2, -2) });
+                return ("", new List<(int, int)> { (-2, -2), (-2, -2), (-2, -2) });
             }
         }
 
-        private static bool ArePositive(params int[] mass)
+        private static bool ArePositive(params float[] mass)
         {
             return mass.All (x => x > 0);
         }
